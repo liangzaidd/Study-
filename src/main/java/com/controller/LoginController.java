@@ -23,7 +23,7 @@ public class LoginController {
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);  //封装用户数据
         try {
             currentUser.login(token);
-            return "redirect:/book/welcome";
+            return "redirect:/book/welcome/1";
         } catch (Exception e) {
             model.addAttribute("msg","用户名或者密码错误，请重新登陆");
             return "login";

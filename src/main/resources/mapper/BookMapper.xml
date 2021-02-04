@@ -6,7 +6,9 @@
 <mapper namespace="com.mapper.BookMapper">
 
     <select id="getAllBooks" resultType="Books">
-        select * from ssm.books where isdelete=0;
+        select *
+        from ssm.books
+        where isdelete=0
     </select>
 
     <select id="getBookById" parameterType="int" resultType="Books">
@@ -32,6 +34,9 @@
     </update>
 
     <select id="getLikeBook" parameterType="String" resultType="Books">
-        select * from ssm.books where bookName like concat('%',#{bookName},'%') and isdelete=0;
+        select *
+        from ssm.books
+        where bookName like concat('%',#{bookName},'%') and isdelete=0
     </select>
+
 </mapper>

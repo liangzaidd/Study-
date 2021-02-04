@@ -3,31 +3,8 @@
 <html>
 <head>
     <title>Welcome</title>
-    <%--bootStrap美化--%>
-<%--    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.css" rel="stylesheet">--%>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="${pageContext.request.contextPath}/js/jquery-3.4.1.js"></script>
-    <script>
-        $(function () {
-            $("#search").on("click",function () {
-                $.ajax({
-                    url:"${pageContext.request.contextPath}/book/searchBook",
-                    data:{"bookName":$("#bookName").val()},
-                    dataType:"json",
-                    success:function (data) {
-                        let html="<tr><th>bookName</th><th>bookCounts</th><th>detail</th></tr>";
-                        for (let i = 0; i < data.length; i++) {
-                            html+="<tr><td>"+data[i].bookName+"</td><td>"
-                                +data[i].bookCounts+"</td><td>"+data[i].detail+"</td></tr>";
-                        }
-                        $("#book").html(html);
-                        console.log(data);
-                    }
-                })
-            })
-        });
-    </script>
 </head>
 <body>
 <div class="container">
@@ -54,21 +31,17 @@
             <div class="col-md-8 column" >
                 <div class="form-inline" style="float: right">
                     <span>${error}</span>
-                        <input type="text" id="bookName" class="form-control" placeholder="请输入要查找的书籍名称">
-                        <input type="submit" id="search" class="btn btn-primary"/>
+                    <form action="/book/searchBook" method="post" >
+                        <input type="text" name="bookName" class="form-control" required="required" placeholder="请输入要查找的书籍名称">
+                        <input type="submit"  class="btn btn-primary"/>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-<%--    <div class="row clearfix">--%>
-<%--        <div class="col-md-4 column  from-inline" style="float: right">--%>
-<%--            <span class="glyphicon glyphicon-log-out"></span>--%>
-<%--            <a href="/logout" >登出</a>--%>
-<%--        </div>--%>
-<%--    </div>--%>
 
     <div class="row clearfix">
-        <table class="table table-hover table-striped">
+        <table class="table table-hover table-striped"  >
             <thead>
             <tr>
                 <th>bookName</th>
@@ -94,12 +67,50 @@
         </table>
     </div>
 
-    <div class="row clearfix">
-        <table class="table table-hover table-striped" id="book">
-
-        </table>
-    </div>
 </div>
+
+
+    <nav aria-label="Page navigation" style="text-align: center" >
+        <ul class="pagination pagination-lg">
+            <%-- 上一页 判断 --%>
+            <c:if test="${page == 1}">
+                <li class="disabled">
+                     <span aria-hidden="false">&laquo;</span>
+                </li>
+            </c:if>
+            <c:if test="${page != 1}">
+                <li>
+                    <a href="/book/welcome/${page-1}" aria-label="Previous">
+                        <span aria-hidden="false">&laquo;</span>
+                    </a>
+                </li>
+            </c:if>
+            <%-- 页数 --%>
+            <c:forEach begin="1" end="${pages}" var="i">
+                <c:if test="${page == i}">
+                    <li class="active"><a href="/book/welcome/${i}">${i}</a></li>
+                </c:if>
+                <c:if test="${page != i}">
+                    <li><a href="/book/welcome/${i}">${i}</a></li>
+                </c:if>
+            </c:forEach>
+            <%-- 下一页 判断 --%>
+            <c:if test="${page == pages}">
+                <li class="disabled">
+                    <span aria-hidden="true">&raquo;</span>
+                </li>
+            </c:if>
+            <c:if test="${page != pages}">
+                <li>
+                    <a href="/book/welcome/${page+1}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+             </c:if>
+
+        </ul>
+    </nav>
+
 
 </body>
 </html>

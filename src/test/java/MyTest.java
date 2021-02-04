@@ -3,6 +3,7 @@ import org.junit.Test;
 public class MyTest {
     @Test
     public void test(){
-        System.out.println("阿斯顿撒");
+        int a=(int)Math.ceil((double)6/5);
+        System.out.println(a);
     }
 }

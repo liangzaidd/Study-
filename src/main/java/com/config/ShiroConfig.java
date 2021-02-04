@@ -29,7 +29,7 @@ public class ShiroConfig {
         map.put("/book/add","roles[admin:add,admin:root]"); //这些需要权限
         map.put("/book/update/*","roles[admin:update,admin:root]");
         map.put("/book/delete/*","roles[admin:root]");
-        map.put("/book/*","authc");  // 访问书籍管理页需要认证
+        map.put("/book/**","authc");  // 访问书籍管理页需要认证
 
         bean.setFilterChainDefinitionMap(map);
         bean.setLoginUrl("/toLogin"); // 设置登录认证的页面
@@ -42,15 +42,15 @@ public class ShiroConfig {
 
     // 2、
     @Bean
-    public DefaultWebSecurityManager defaultWebSecurityManager(@Autowired UserRealm userRealm){
-        return new DefaultWebSecurityManager(userRealm);
+    public DefaultWebSecurityManager defaultWebSecurityManager(@Autowired ShiroRealm shiroRealm){
+        return new DefaultWebSecurityManager(shiroRealm);
     }
 
 
-    // 1、创建Realm对象
+    // 1、创建realm对象
     @Bean
-    public UserRealm userRealm(){
-        return new UserRealm();
+    public ShiroRealm userRealm(){
+        return new ShiroRealm();
     }
 
 }

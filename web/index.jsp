@@ -5,7 +5,8 @@
 
   </head>
   <body>
-  <h3><a href="${pageContext.request.contextPath}/book/welcome" style="text-decoration: none">进入首页</a></h3>
+
+    <h3 style="text-align: center;line-height:375px "><a href="${pageContext.request.contextPath}/book/welcome" style="text-decoration: none">进入首页</a></h3></div>
   </body>
 
 </html>

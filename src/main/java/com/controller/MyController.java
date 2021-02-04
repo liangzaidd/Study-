@@ -1,17 +1,19 @@
 package com.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pojo.Books;
 import com.service.BookService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/book")
@@ -22,11 +24,25 @@ public class MyController {
         this.bookService = bookService;
     }
     //查询书籍
-    @RequestMapping("/welcome")
-    public String welcome(Model model){
-        List<Books> allBooks = bookService.getAllBooks();
-        model.addAttribute("list",allBooks);
+    @RequestMapping("/welcome/{offset}")
+    public String welcome(@PathVariable int offset, Model model){
+        PageHelper.offsetPage((offset-1)*5,5); // 分页
+        List<Books> allBooks = bookService.getAllBooks(); //获取书籍
+        /*int pages=bookService.getAllBooks().size(); // 获取书籍数量*/
+
+        PageInfo<Books> pageInfo=new PageInfo<Books>(allBooks);
+        Map<String, Object> map = new HashMap<>();
+        map.put("list",allBooks);  // 存入属性
+        map.put("pages",pageInfo.getPages());  // 存入页面数量
+        /*map.put("pages",(int)Math.ceil((double)pages/5)); */ // 存入页面数量
+        map.put("page",pageInfo.getPageNum());  // 当前页面
+        model.addAllAttributes(map);
         return "welcome";
+    }
+    //查询书籍
+    @RequestMapping("/welcome")
+    public String welcome(){
+        return "redirect:/book/welcome/1";
     }
     //增加书籍页
     @RequestMapping("/add")
@@ -65,15 +81,13 @@ public class MyController {
 
     //查询书籍
     @RequestMapping("/searchBook")
-    @ResponseBody
-    public List<Books> searchBook(@RequestParam String bookName,Model model){
-        if (bookName==null||bookName.length()==0){
-            model.addAttribute("error","请输入您要查找的书名");
-            return null;
-        }else {
+    public String searchBook(@RequestParam String bookName,Model model){
             List<Books> books = bookService.getLikeBook(bookName);
-            return books;
-        }
+            if (books.isEmpty()){
+                model.addAttribute("error","未找到结果请重新输入");
+            }
+            model.addAttribute("list",books);
+            return "SearchBook";
     }
 
 

@@ -1,5 +1,8 @@
 package com.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.PageInterceptor;
 import com.mapper.BookMapper;
 import com.pojo.Books;
 import org.springframework.beans.factory.annotation.Autowired;
